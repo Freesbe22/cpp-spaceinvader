@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "Space Invader",
+					"name" : "SpaceInvader",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "CMakeTarget::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CMakeTarget-Debug-77a1603b1712df49b795.json",
-					"name" : "CMakeTarget",
+					"id" : "SpaceInvader::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SpaceInvader-Debug-9c00144d70606b38f29f.json",
+					"name" : "SpaceInvader",
 					"projectIndex" : 0
 				}
 			]

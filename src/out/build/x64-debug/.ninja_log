@@ -1,3 +1,4 @@
 # ninja log v6
-8	738	7702312660944037	CMakeFiles/CMakeTarget.dir/Space_Invader.cpp.obj	e725f018a91905c3
-739	986	7702312668261967	CMakeTarget.exe	27268ad93c1551ff
+4	125	7703016766652709	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
+10	212	7703114048000950	build.ninja	b7acbc9398174699
+11	336	7703114099276369	SpaceInvader.exe	cbf682f2298137e6
