@@ -3,20 +3,16 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "utils/colors_transform.h"
+
 #include "structs/buffer.cpp"
 #include "structs/sprite.cpp"
+#include "utils/colors_transform.cpp"
 
 void errorCallback(int error, const char* description)
 {
   std::cerr << "Error [" << error << "] : " << description << std::endl;
 }
-
-uint32_t rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b)
-{
-  return (r << 24) | (g << 16) | (b << 8) | 255;
-}
-void validate_shader(GLuint shader, const char* file = 0)
+void validateShader(GLuint shader, const char* file = 0)
 {
   static const unsigned int BUFFER_SIZE = 512;
   char buffer[BUFFER_SIZE];
@@ -30,7 +26,7 @@ void validate_shader(GLuint shader, const char* file = 0)
   }
 }
 
-bool validate_program(GLuint program)
+bool validateProgram(GLuint program)
 {
   static const GLsizei BUFFER_SIZE = 512;
   GLchar buffer[BUFFER_SIZE];
@@ -78,7 +74,6 @@ int main(void)
   const size_t buffer_height = 256;
 
   glfwSetErrorCallback(errorCallback);
-  GLFWwindow* window;
 
   /* Initialize the library */
   if (!glfwInit()) return -1;
@@ -89,7 +84,7 @@ int main(void)
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
   /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 480, "Space Invaders", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(buffer_width, buffer_height, "Space Invaders", NULL, NULL);
   if (!window)
   {
     glfwTerminate();
@@ -98,7 +93,6 @@ int main(void)
 
   /* Make the window's context current */
   glfwMakeContextCurrent(window);
-  glClearColor(0.4f, 0.3f, 0.4f, 0.0f);
 
   GLenum err = glewInit();
   if (err != GLEW_OK)
@@ -107,22 +101,27 @@ int main(void)
     glfwTerminate();
     return -1;
   }
-  int glVersion[2] = {-1, 1};
-  glGetIntegerv(GL_MAJOR_VERSION, &glVersion[0]);
-  glGetIntegerv(GL_MINOR_VERSION, &glVersion[1]);
 
-  printf("Using OpenGL: %d.%d\n", glVersion[0], glVersion[1]);
+  glClearColor(1.0, 0.0, 0.0, 1.0);
 
-  uint32_t clear_color = rgb_to_uint32(0, 128, 0);
   Buffer buffer;
   buffer.width = buffer_width;
   buffer.height = buffer_height;
   buffer.data = new uint32_t[buffer.width * buffer.height];
-  buffer_clear(&buffer, clear_color);
+  buffer_clear(&buffer, 0);
+
+  GLuint buffer_texture;
+  glGenTextures(1, &buffer_texture);
+  glBindTexture(GL_TEXTURE_2D, buffer_texture);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, buffer.width, buffer.height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8,
+               buffer.data);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
   GLuint fullscreen_triangle_vao;
   glGenVertexArrays(1, &fullscreen_triangle_vao);
-  glBindVertexArray(fullscreen_triangle_vao);
 
   GLuint shader_id = glCreateProgram();
 
@@ -132,7 +131,7 @@ int main(void)
 
     glShaderSource(shader_vp, 1, &vertex_shader, 0);
     glCompileShader(shader_vp);
-    validate_shader(shader_vp, vertex_shader);
+    validateShader(shader_vp, vertex_shader);
     glAttachShader(shader_id, shader_vp);
 
     glDeleteShader(shader_vp);
@@ -144,7 +143,7 @@ int main(void)
 
     glShaderSource(shader_fp, 1, &fragment_shader, 0);
     glCompileShader(shader_fp);
-    validate_shader(shader_fp, fragment_shader);
+    validateShader(shader_fp, fragment_shader);
     glAttachShader(shader_id, shader_fp);
 
     glDeleteShader(shader_fp);
@@ -152,7 +151,7 @@ int main(void)
 
   glLinkProgram(shader_id);
 
-  if (!validate_program(shader_id))
+  if (!validateProgram(shader_id))
   {
     fprintf(stderr, "Error while validating shader.\n");
     glfwTerminate();
@@ -169,18 +168,7 @@ int main(void)
   glDisable(GL_DEPTH_TEST);
   glActiveTexture(GL_TEXTURE0);
 
-  GLuint buffer_texture;
-  glGenTextures(1, &buffer_texture);
-  glBindTexture(GL_TEXTURE_2D, buffer_texture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, buffer.width, buffer.height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8,
-               buffer.data);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
   glBindVertexArray(fullscreen_triangle_vao);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
 
   Sprite alien_sprite;
   alien_sprite.width = 11;
@@ -195,18 +183,18 @@ int main(void)
       1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1,  // @.@.....@.@
       0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0   // ...@@.@@...
   };
+  uint32_t clear_color = color_transform::rgb_to_uint32(0, 128, 0);
 
   /* Loop until the user closes the window */
   while (!glfwWindowShouldClose(window))
   {
     buffer_clear(&buffer, clear_color);
 
-    buffer_sprite_draw(&buffer, alien_sprite, 112, 128, rgb_to_uint32(128, 0, 0));
+    buffer_sprite_draw(&buffer, alien_sprite, 112, 128, color_transform::rgb_to_uint32(128, 0, 0));
 
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, buffer.width, buffer.height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, buffer.data);
 
-    /* Render here */
-    glClear(GL_COLOR_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
@@ -217,5 +205,10 @@ int main(void)
 
   glfwDestroyWindow(window);
   glfwTerminate();
+
+  glDeleteVertexArrays(1, &fullscreen_triangle_vao);
+
+  delete[] alien_sprite.data;
+  delete[] buffer.data;
   return 0;
 }
