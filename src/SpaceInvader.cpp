@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "structs/buffer.cpp"
+#include "structs/game.cpp"
 #include "structs/sprite.cpp"
 #include "utils/colors_transform.cpp"
 
@@ -183,6 +184,40 @@ int main(void)
       1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1,  // @.@.....@.@
       0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0   // ...@@.@@...
   };
+
+  Sprite player_sprite;
+  player_sprite.width = 11;
+  player_sprite.height = 7;
+  player_sprite.data = new uint8_t[77]{
+      0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,  // .....@.....
+      0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,  // ....@@@....
+      0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,  // ....@@@....
+      0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,  // .@@@@@@@@@.
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // @@@@@@@@@@@
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // @@@@@@@@@@@
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // @@@@@@@@@@@
+  };
+
+  Game game;
+  game.width = buffer_width;
+  game.height = buffer_height;
+  game.num_aliens = 55;
+  game.aliens = new Alien[game.num_aliens];
+
+  game.player.x = 112 - 5;
+  game.player.y = 32;
+
+  game.player.life = 3;
+
+  for (size_t yi = 0; yi < 5; ++yi)
+  {
+    for (size_t xi = 0; xi < 11; ++xi)
+    {
+      game.aliens[yi * 11 + xi].x = 16 * xi + 20;
+      game.aliens[yi * 11 + xi].y = 17 * yi + 128;
+    }
+  }
+
   uint32_t clear_color = color_transform::rgb_to_uint32(0, 128, 0);
 
   /* Loop until the user closes the window */
@@ -190,7 +225,13 @@ int main(void)
   {
     buffer_clear(&buffer, clear_color);
 
-    buffer_sprite_draw(&buffer, alien_sprite, 112, 128, color_transform::rgb_to_uint32(128, 0, 0));
+    for (size_t ai = 0; ai < game.num_aliens; ++ai)
+    {
+      const Alien& alien = game.aliens[ai];
+      buffer_sprite_draw(&buffer, alien_sprite, alien.x, alien.y, color_transform::rgb_to_uint32(128, 0, 0));
+    }
+
+    buffer_sprite_draw(&buffer, player_sprite, game.player.x, game.player.y, color_transform::rgb_to_uint32(128, 0, 0));
 
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, buffer.width, buffer.height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, buffer.data);
 
