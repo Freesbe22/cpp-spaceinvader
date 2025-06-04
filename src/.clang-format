@@ -1,0 +1,25 @@
+# Basé sur le style Google
+BasedOnStyle: Google
+IndentWidth: 2 # Google utilise 2, tu peux passer à 4 si tu préfères
+TabWidth: 2
+UseTab: Never # Espaces uniquement
+ColumnLimit: 120 # Google = 80, mais 120 est plus lisible aujourd’hui
+
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+
+BreakBeforeBraces: Allman # { sur une nouvelle ligne pour plus de clarté
+SpacesInParentheses: false
+SpaceBeforeParens: ControlStatements
+PointerAlignment: Left # Type* ptr au lieu de Type *ptr
+
+# Tri des includes (C++ standard > externes > locaux)
+IncludeBlocks: Preserve
+SortIncludes: true
+
+# Nommage (non vérifié directement par clang-format, mais ici pour mémoire)
+# Les outils comme cpplint ou clang-tidy peuvent les checker
+
+ReflowComments: true
+CommentPragmas: "^ IWYU pragma:" # Pour compatibilité avec include-what-you-use
