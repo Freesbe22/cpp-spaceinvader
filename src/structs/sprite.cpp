@@ -19,3 +19,11 @@ void buffer_sprite_draw(Buffer* buffer, const Sprite& sprite, size_t x, size_t y
     }
   }
 }
+struct SpriteAnimation
+{
+  bool loop;
+  size_t num_frames;
+  size_t frame_duration;
+  size_t time;
+  Sprite** frames;
+};

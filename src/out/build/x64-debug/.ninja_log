@@ -1,15 +1,9 @@
 # ninja log v6
-24	867	7707527617375355	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-10	212	7707528698400282	build.ninja	b7acbc9398174699
-867	1032	7707527625804519	SpaceInvader.exe	55b09772cb6e6c51
-30	81	7707527617420825	CMakeFiles/SpaceInvader.dir/SpaceInvader_save.cpp.obj	8e19469deb90543a
-20	845	7707528866558434	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-5	808	7707529931822958	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-5	844	7707530313048271	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-844	1015	7707530321441794	SpaceInvader.exe	ca321b64090a3517
-24	852	7707531367039798	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-853	1016	7707531375325484	SpaceInvader.exe	ca321b64090a3517
-5	840	7707542915278077	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
-841	994	7707542923637668	SpaceInvader.exe	ca321b64090a3517
 24	875	7707543099972655	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
+10	212	7708296850422990	build.ninja	b7acbc9398174699
 876	1021	7707543108496388	SpaceInvader.exe	ca321b64090a3517
+30	81	7707527617420825	CMakeFiles/SpaceInvader.dir/SpaceInvader_save.cpp.obj	8e19469deb90543a
+5	855	7708301033169052	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
+856	1076	7708301041682464	SpaceInvader.exe	ca321b64090a3517
+23	883	7708303027463124	CMakeFiles/SpaceInvader.dir/SpaceInvader.cpp.obj	c2316c47a1bc295f
+5	149	7708303378641015	SpaceInvader.exe	ca321b64090a3517
